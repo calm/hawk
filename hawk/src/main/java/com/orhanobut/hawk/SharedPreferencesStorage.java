@@ -6,18 +6,21 @@ import android.content.SharedPreferences;
 final class SharedPreferencesStorage implements Storage {
 
   private final SharedPreferences preferences;
+  private final boolean useApply;
 
-  SharedPreferencesStorage(Context context, String tag) {
+  SharedPreferencesStorage(Context context, String tag, boolean saveUsingApply) {
     preferences = context.getSharedPreferences(tag, Context.MODE_PRIVATE);
+    useApply = saveUsingApply;
   }
 
   SharedPreferencesStorage(SharedPreferences preferences) {
     this.preferences = preferences;
+    this.useApply = false;
   }
 
   @Override public <T> boolean put(String key, T value) {
     HawkUtils.checkNull("key", key);
-    return getEditor().putString(key, String.valueOf(value)).commit();
+    return save(getEditor().putString(key, String.valueOf(value)));
   }
 
   @SuppressWarnings("unchecked")
@@ -26,7 +29,7 @@ final class SharedPreferencesStorage implements Storage {
   }
 
   @Override public boolean delete(String key) {
-    return getEditor().remove(key).commit();
+    return save(getEditor().remove(key));
   }
 
   @Override public boolean contains(String key) {
@@ -34,7 +37,7 @@ final class SharedPreferencesStorage implements Storage {
   }
 
   @Override public boolean deleteAll() {
-    return getEditor().clear().commit();
+    return save(getEditor().clear());
   }
 
   @Override public long count() {
@@ -45,4 +48,12 @@ final class SharedPreferencesStorage implements Storage {
     return preferences.edit();
   }
 
+  private boolean save(SharedPreferences.Editor editor) {
+    if(useApply) {
+      editor.apply();
+      return true;
+    } else {
+      return editor.commit();
+    }
+  }
 }

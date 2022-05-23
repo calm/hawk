@@ -19,6 +19,7 @@ public class HawkBuilder {
   private Encryption encryption;
   private Serializer serializer;
   private LogInterceptor logInterceptor;
+  private boolean nonBlockingSaves = false;
 
   public HawkBuilder(Context context) {
     HawkUtils.checkNull("Context", context);
@@ -56,6 +57,11 @@ public class HawkBuilder {
     return this;
   }
 
+  public HawkBuilder useNonBlockingSaves(boolean nonBlockingSaves) {
+    this.nonBlockingSaves = nonBlockingSaves;
+    return this;
+  }
+
   LogInterceptor getLogInterceptor() {
     if (logInterceptor == null) {
       logInterceptor = new LogInterceptor() {
@@ -69,7 +75,7 @@ public class HawkBuilder {
 
   Storage getStorage() {
     if (cryptoStorage == null) {
-      cryptoStorage = new SharedPreferencesStorage(context, STORAGE_TAG_DO_NOT_CHANGE);
+      cryptoStorage = new SharedPreferencesStorage(context, STORAGE_TAG_DO_NOT_CHANGE, nonBlockingSaves);
     }
     return cryptoStorage;
   }
