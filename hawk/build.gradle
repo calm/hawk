@@ -5,6 +5,8 @@ android {
   compileSdkVersion rootProject.ext.compileSdkVersion
   buildToolsVersion rootProject.ext.buildToolsVersion
 
+  namespace 'com.orhanobut.hawk'
+
   defaultConfig {
     minSdkVersion rootProject.ext.minSdkVersion
     consumerProguardFiles 'proguard-rules.pro'
