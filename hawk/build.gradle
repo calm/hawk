@@ -20,7 +20,9 @@ android {
 }
 
 dependencies {
-  api deps.conceal
+  // A modified version of Conceal v1.1.3 with 16KB-aligned native libraries
+  api files('libs/conceal-1.1.3-16kb.aar')
+
   implementation deps.gson
 
   testImplementation deps.junit
