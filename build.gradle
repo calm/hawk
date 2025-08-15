@@ -14,6 +14,13 @@ allprojects {
   repositories {
     google()
     jcenter()
+    ivy {
+      url = uri("https://github.com/calm/hawk/releases/download")
+      patternLayout {
+        artifact("/[organisation]/[artifact]-[revision].[ext]")
+      }
+      metadataSources { artifact() }
+    }
   }
 }
 
@@ -55,7 +62,10 @@ ext {
 
 ext.deps = [
     gson          : 'com.google.code.gson:gson:2.8.2',
-    conceal       : 'com.facebook.conceal:conceal:1.1.3@aar',
+
+    // A modified version of Conceal v1.1.3 with 16KB-aligned native libraries.
+    // Pulled from the Hawk v2.1.0-16kb GitHub Release asset.
+    conceal       : 'v2.1.0-16kb:conceal:1.1.3-16kb@aar',
 
     // Test dependencies
     junit         : 'junit:junit:4.12',
